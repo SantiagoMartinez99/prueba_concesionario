@@ -19,8 +19,7 @@ Asegúrate de tener instalados los siguientes programas en tu máquina:
    Abre una terminal y clona el repositorio:
 
    ```bash
-   git clone <URL_DEL_REPOSITORIO>
-   cd <NOMBRE_DEL_REPOSITORIO>
+   git clone (https://github.com/SantiagoMartinez99/prueba_concesionario.git)
 
 2. **Restaurar Dependencias**
 
