@@ -22,7 +22,9 @@ namespace server.Mappers
                 RegistrationDate = motorcycleModel.RegistrationDate,
                 IsUsed = motorcycleModel.IsUsed,
                 EngineCapacity = motorcycleModel.EngineCapacity,
-                Gears = motorcycleModel.Gears
+                Gears = motorcycleModel.Gears,
+                IsSold = motorcycleModel.IsSold
+
 
             };
         }
@@ -38,7 +40,9 @@ namespace server.Mappers
                 RegistrationDate = motorcycleDto.RegistrationDate,
                 IsUsed = motorcycleDto.IsUsed,
                 EngineCapacity = motorcycleDto.EngineCapacity,
-                Gears = motorcycleDto.Gears
+                Gears = motorcycleDto.Gears,
+                IsSold = motorcycleDto.IsSold
+
             };
         }
     }

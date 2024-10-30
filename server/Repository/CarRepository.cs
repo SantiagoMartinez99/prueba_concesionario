@@ -66,6 +66,7 @@ namespace server.Repository
             carModel.Image = updateCarDto.Image;
             carModel.RegistrationDate = updateCarDto.RegistrationDate;
             carModel.IsUsed = updateCarDto.IsUsed;
+            carModel.IsSold = updateCarDto.IsSold;
             await _context.SaveChangesAsync();
 
             return carModel;

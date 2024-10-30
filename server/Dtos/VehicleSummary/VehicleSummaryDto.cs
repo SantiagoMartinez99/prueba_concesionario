@@ -10,5 +10,6 @@ namespace server.Dtos.VehicleSummary
         public string? Model { get; set; }
         public decimal TotalValue { get; set; }
         public int VehicleCount { get; set; }
+        public bool IsSold { get; set; }
     }
 }

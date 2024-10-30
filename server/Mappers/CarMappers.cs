@@ -20,8 +20,8 @@ namespace server.Mappers
                 Price = carModel.Price,
                 Image = carModel.Image,
                 RegistrationDate = carModel.RegistrationDate,
-                IsUsed = carModel.IsUsed
-
+                IsUsed = carModel.IsUsed,
+                IsSold = carModel.IsSold
             };
         }
 
@@ -35,7 +35,8 @@ namespace server.Mappers
                 Price = carDto.Price,
                 Image = carDto.Image,
                 RegistrationDate = carDto.RegistrationDate,
-                IsUsed = carDto.IsUsed
+                IsUsed = carDto.IsUsed,
+                IsSold = carDto.IsSold
             };
         }
     }

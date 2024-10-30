@@ -16,7 +16,8 @@ namespace server.Mappers
             {
                 Model = vehicleSummaryModel.Model,
                 TotalValue = vehicleSummaryModel.TotalValue,
-                VehicleCount = count
+                VehicleCount = count,
+                IsSold = vehicleSummaryModel.IsSold
 
             };
         }

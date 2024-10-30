@@ -31,7 +31,7 @@ import {
 import React, { useEffect, useState } from "react";
 
 interface Vehicle {
-  id: number;
+  id?: number;
   model: string;
   color: string;
   mileage: number;
@@ -39,6 +39,7 @@ interface Vehicle {
   image: string;
   registrationDate: Date;
   isUsed: boolean;
+  isSold: boolean;
 }
 
 interface Motorcycle extends Vehicle {
@@ -61,6 +62,7 @@ const VehicleDashboard: React.FC<VehicleDashboardProps> = ({ vehicleType }) => {
   const [customerName, setCustomerName] = useState("");
   const [customerDocument, setCustomerDocument] = useState("");
 
+  // Fetch data on component mount
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -96,17 +98,17 @@ const VehicleDashboard: React.FC<VehicleDashboardProps> = ({ vehicleType }) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
     const newVehicle: Vehicle | Motorcycle = {
-      id: currentVehicle ? currentVehicle.id : Date.now(),
+      // id: currentVehicle ? currentVehicle.id : Date.now(),
       model: formData.get("model") as string,
       color: formData.get("color") as string,
       mileage: parseInt(formData.get("mileage") as string),
       price: parseFloat(formData.get("price") as string),
       image: formData.get("image") as string,
       registrationDate: new Date(),
-      isUsed: isUsed === "usado",
+      isUsed: formData.get("isUsed") === "usado",
+      isSold: false,
     };
 
-    // Agregar propiedades específicas para motocicletas
     if (vehicleType === "motorcycle") {
       (newVehicle as Motorcycle).engineCapacity = parseInt(
         formData.get("engineCapacity") as string
@@ -196,6 +198,7 @@ const VehicleDashboard: React.FC<VehicleDashboardProps> = ({ vehicleType }) => {
     setVehicles(vehicles.filter((vehicle) => vehicle.id !== id));
   };
 
+  // Función para abrir el diálogo de venta
   const handleSellOpen = (vehicle: Vehicle) => {
     setCurrentVehicle(vehicle);
     setSellOpen(true);
@@ -211,11 +214,10 @@ const VehicleDashboard: React.FC<VehicleDashboardProps> = ({ vehicleType }) => {
   const handleSell = async () => {
     if (!currentVehicle) return;
 
-    // Crear la persona en la base de datos
     const buyerData = {
       Name: customerName,
       DocumentNumber: customerDocument,
-      VehicleId: currentVehicle.id,
+      VehicleId: currentVehicle.id, // Asegúrate de que este ID sea correcto
     };
 
     const customerResponse = await fetch("http://localhost:5231/api/customer", {
@@ -231,7 +233,16 @@ const VehicleDashboard: React.FC<VehicleDashboardProps> = ({ vehicleType }) => {
       return;
     }
 
-    const saleData = { vehicleId: currentVehicle.id, buyer: buyerData };
+    const createdCustomer = await customerResponse.json();
+    const customerId = createdCustomer.id;
+
+    const saleData = {
+      vehicleId: currentVehicle.id, // Verifica que este ID sea correcto
+      customerId,
+    };
+
+    console.log("Datos de la venta:", saleData); // Imprimir para ver el payload
+
     const saleResponse = await fetch("http://localhost:5231/api/sale", {
       method: "POST",
       headers: {
@@ -245,14 +256,35 @@ const VehicleDashboard: React.FC<VehicleDashboardProps> = ({ vehicleType }) => {
       return;
     }
 
-    await fetch(
+    // Actualizar estado del vehículo
+    const updatedVehicle = { ...currentVehicle, isSold: true };
+    const updateResponse = await fetch(
       `http://localhost:5231/api/${vehicleType}/${currentVehicle.id}`,
       {
-        method: "DELETE",
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(updatedVehicle),
       }
     );
 
-    setVehicles(vehicles.filter((vehicle) => vehicle.id !== currentVehicle.id));
+    if (!updateResponse.ok) {
+      console.error(
+        "Error actualizando vehículo:",
+        await updateResponse.text()
+      );
+      return;
+    }
+
+    // Actualizar la lista de vehículos
+    setVehicles(
+      vehicles.map((vehicle) =>
+        vehicle.id === currentVehicle.id
+          ? { ...vehicle, isSold: true }
+          : vehicle
+      )
+    );
 
     handleSellClose();
   };
@@ -297,53 +329,59 @@ const VehicleDashboard: React.FC<VehicleDashboardProps> = ({ vehicleType }) => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {vehicles.map((vehicle) => (
-                  <TableRow key={vehicle.id}>
-                    <TableCell>{vehicle.model}</TableCell>
-                    <TableCell>{vehicle.color}</TableCell>
-                    <TableCell>{vehicle.price}</TableCell>
-                    <TableCell>{vehicle.mileage}</TableCell>
-                    <TableCell>
-                      <img
-                        src={vehicle.image}
-                        alt={vehicle.model}
-                        style={{ width: "50px", height: "50px" }}
-                      />
-                    </TableCell>
-                    <TableCell>
-                      {new Date(vehicle.registrationDate).toLocaleDateString()}
-                    </TableCell>
-                    <TableCell>{vehicle.isUsed ? "Usado" : "Nuevo"}</TableCell>
-                    {vehicleType === "motorcycle" && (
+                {vehicles
+                  .filter((vehicle) => vehicle.isSold === false)
+                  .map((vehicle, index) => (
+                    <TableRow key={index}>
+                      <TableCell>{vehicle.model}</TableCell>
+                      <TableCell>{vehicle.color}</TableCell>
+                      <TableCell>$ {vehicle.price}</TableCell>
+                      <TableCell>{vehicle.mileage} km</TableCell>
                       <TableCell>
-                        {(vehicle as Motorcycle).engineCapacity}
+                        <img
+                          src={vehicle.image}
+                          alt={vehicle.model}
+                          style={{ width: "50px", height: "50px" }}
+                        />
                       </TableCell>
-                    )}
-                    {vehicleType === "motorcycle" && (
-                      <TableCell>{(vehicle as Motorcycle).gears}</TableCell>
-                    )}
-                    <TableCell>
-                      <IconButton
-                        color="primary"
-                        onClick={() => handleOpen(vehicle)}
-                      >
-                        <EditIcon />
-                      </IconButton>
-                      <IconButton
-                        color="error"
-                        onClick={() => handleDelete(vehicle.id)}
-                      >
-                        <DeleteIcon />
-                      </IconButton>
-                      <IconButton
-                        color="success"
-                        onClick={() => handleSellOpen(vehicle)}
-                      >
-                        <SellIcon />
-                      </IconButton>
-                    </TableCell>
-                  </TableRow>
-                ))}
+                      <TableCell>
+                        {new Date(
+                          vehicle.registrationDate
+                        ).toLocaleDateString()}
+                      </TableCell>
+                      <TableCell>
+                        {vehicle.isUsed ? "Usado" : "Nuevo"}
+                      </TableCell>
+                      {vehicleType === "motorcycle" && (
+                        <TableCell>
+                          {(vehicle as Motorcycle).engineCapacity}
+                        </TableCell>
+                      )}
+                      {vehicleType === "motorcycle" && (
+                        <TableCell>{(vehicle as Motorcycle).gears}</TableCell>
+                      )}
+                      <TableCell>
+                        <IconButton
+                          color="primary"
+                          onClick={() => handleOpen(vehicle)}
+                        >
+                          <EditIcon />
+                        </IconButton>
+                        <IconButton
+                          color="error"
+                          onClick={() => handleDelete(vehicle.id!)}
+                        >
+                          <DeleteIcon />
+                        </IconButton>
+                        <IconButton
+                          color="success"
+                          onClick={() => handleSellOpen(vehicle)}
+                        >
+                          <SellIcon />
+                        </IconButton>
+                      </TableCell>
+                    </TableRow>
+                  ))}
               </TableBody>
             </Table>
           </TableContainer>
@@ -430,10 +468,17 @@ const VehicleDashboard: React.FC<VehicleDashboardProps> = ({ vehicleType }) => {
               <InputLabel id="isUsed-label">Estado</InputLabel>
               <Select
                 labelId="isUsed-label"
+                label="Estado"
                 value={isUsed}
                 onChange={(e) => setIsUsed(e.target.value)}
-                required
-                sx={{ my: 1 }}
+                name="isUsed"
+                defaultValue={
+                  currentVehicle
+                    ? currentVehicle.isUsed
+                      ? "usado"
+                      : "nuevo"
+                    : "nuevo"
+                }
               >
                 <MenuItem value="nuevo">Nuevo</MenuItem>
                 <MenuItem value="usado">Usado</MenuItem>

@@ -28,5 +28,7 @@ namespace server.Dtos.Car
         public DateTime RegistrationDate { get; set; } = DateTime.Now;
         [Required]
         public bool IsUsed { get; set; } = false;
+        [Required]
+        public bool IsSold { get; set; } = false;
     }
 }

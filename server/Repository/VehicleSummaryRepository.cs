@@ -26,6 +26,7 @@ namespace server.Repository
                 {
                     Model = g.Key,
                     TotalValue = g.Sum(v => v.Price),
+                    IsSold = g.Any(v => v.IsSold),
                     VehicleCount = g.Count()
 
                 })

@@ -29,6 +29,7 @@ namespace server.Dtos.Motorcycle
         public DateTime RegistrationDate { get; set; } = DateTime.Now;
         [Required]
         public bool IsUsed { get; set; } = false;
+        public bool IsSold { get; set; } = false;
         [Required]
         public int EngineCapacity { get; set; } = 0;
         [Required]

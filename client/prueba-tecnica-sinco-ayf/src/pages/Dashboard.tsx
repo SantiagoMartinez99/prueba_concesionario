@@ -26,7 +26,6 @@ export default function Component() {
     dispatch(fetchSummaryData());
   }, [dispatch]);
 
-
   return (
     <>
       <Navbar />

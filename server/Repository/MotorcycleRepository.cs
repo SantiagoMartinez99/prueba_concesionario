@@ -68,6 +68,7 @@ namespace server.Repository
             motorcycle.IsUsed = updateMotorcycleDto.IsUsed;
             motorcycle.EngineCapacity = updateMotorcycleDto.EngineCapacity;
             motorcycle.Gears = updateMotorcycleDto.Gears;
+            motorcycle.IsSold = updateMotorcycleDto.IsSold;
             await _context.SaveChangesAsync();
             return motorcycle;
         }

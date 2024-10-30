@@ -147,3 +147,4 @@ C:\Users\dsant\OneDrive\Documentos\REPOSITORIOS\prueba-tecnica-sinco-ayf\server\
 C:\Users\dsant\OneDrive\Documentos\REPOSITORIOS\prueba-tecnica-sinco-ayf\server\obj\Debug\net8.0\server.pdb
 C:\Users\dsant\OneDrive\Documentos\REPOSITORIOS\prueba-tecnica-sinco-ayf\server\obj\Debug\net8.0\server.genruntimeconfig.cache
 C:\Users\dsant\OneDrive\Documentos\REPOSITORIOS\prueba-tecnica-sinco-ayf\server\obj\Debug\net8.0\ref\server.dll
+C:\Users\dsant\OneDrive\Documentos\REPOSITORIOS\prueba-tecnica-sinco-ayf\server\obj\Debug\net8.0\server.sourcelink.json

@@ -75,10 +75,11 @@ namespace server.Migrations
                     Model = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Color = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Mileage = table.Column<int>(type: "int", nullable: false),
-                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Price = table.Column<decimal>(type: "decimal(10,0)", nullable: false),
                     Image = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     RegistrationDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     IsUsed = table.Column<bool>(type: "bit", nullable: false),
+                    IsSold = table.Column<bool>(type: "bit", nullable: false),
                     Discriminator = table.Column<string>(type: "nvarchar(13)", maxLength: 13, nullable: false),
                     EngineCapacity = table.Column<int>(type: "int", nullable: true),
                     Gears = table.Column<int>(type: "int", nullable: true)
@@ -219,8 +220,8 @@ namespace server.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "22ddad52-33dd-4237-9eb9-a956d45b2b0a", null, "Admin", "ADMIN" },
-                    { "3434db58-bc87-4463-9983-81c29c062ff2", null, "User", "USER" }
+                    { "7fd57b50-e10d-44f3-84ad-fa1ccbf194e4", null, "Admin", "ADMIN" },
+                    { "dde0e10c-844e-444b-ab58-e110ecaefccc", null, "User", "USER" }
                 });
 
             migrationBuilder.CreateIndex(

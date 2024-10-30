@@ -12,7 +12,7 @@ using server.Data;
 namespace server.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    [Migration("20241029142838_init")]
+    [Migration("20241030132529_init")]
     partial class init
     {
         /// <inheritdoc />
@@ -54,13 +54,13 @@ namespace server.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "22ddad52-33dd-4237-9eb9-a956d45b2b0a",
+                            Id = "7fd57b50-e10d-44f3-84ad-fa1ccbf194e4",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "3434db58-bc87-4463-9983-81c29c062ff2",
+                            Id = "dde0e10c-844e-444b-ab58-e110ecaefccc",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -302,6 +302,9 @@ namespace server.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("IsSold")
+                        .HasColumnType("bit");
+
                     b.Property<bool>("IsUsed")
                         .HasColumnType("bit");
 
@@ -313,7 +316,7 @@ namespace server.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(10,0)");
 
                     b.Property<DateTime>("RegistrationDate")
                         .HasColumnType("datetime2");

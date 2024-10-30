@@ -6,6 +6,7 @@ export interface VehicleSummaryData {
   model: string;
   totalValue: number;
   vehicleCount: number;
+  isSold: boolean; // Asegúrate de que esto esté en tus datos
 }
 
 interface VehicleSummaryState {
@@ -43,7 +44,9 @@ const vehicleSummarySlice = createSlice({
       })
       .addCase(fetchSummaryData.fulfilled, (state, action) => {
         state.loading = false;
-        state.summaryData = action.payload;
+        state.summaryData = action.payload.filter(
+          (vehicle: VehicleSummaryData) => !vehicle.isSold
+        );
       })
       .addCase(fetchSummaryData.rejected, (state, action) => {
         state.loading = false;

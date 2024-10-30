@@ -34,5 +34,8 @@ namespace server.Dtos.Motorcycle
         public int EngineCapacity { get; set; } = 0;
         [Required]
         public int Gears { get; set; } = 0;
+
+        public bool IsSold { get; set; } = false;
+
     }
 }

@@ -15,6 +15,7 @@ namespace server.Dtos.Car
         public string Image { get; set; } = string.Empty;
         public DateTime RegistrationDate { get; set; } = DateTime.Now;
         public bool IsUsed { get; set; } = false;
+         public bool IsSold { get; set; } = false; 
     }
 
 }
